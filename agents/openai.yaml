@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Code Agents"
+  short_description: "Invoke Claude Code agents safely"
+  default_prompt: "Use $claude-code-agents to delegate this task to a bounded Claude Code agent."
