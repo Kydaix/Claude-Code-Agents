@@ -23,6 +23,7 @@ Verified on 2026-05-05 from current Anthropic and OpenAI documentation.
 - `--agent` can select a Claude Code agent for a session. `--agents` can load custom agent definitions as JSON.
 - Project subagents live under `.claude/agents/`; user subagents live under `~/.claude/agents/`.
 - In `-p` mode, interactive slash commands and user-invoked Claude skills are not available; describe the task directly instead.
+- Claude Code can connect to external tools through MCP, including local stdio servers, but Codex's in-app browser is not documented as a public MCP server. Use the Codex browser bridge protocol when Claude needs Codex-only browser observations.
 
 ## Recommended Defaults
 

@@ -35,3 +35,32 @@ After installation, invoke the skill explicitly:
 ```text
 Use $claude-code-agents to ask Claude Code to review the current diff without editing files.
 ```
+
+## Codex In-App Browser Bridge
+
+Claude Code cannot directly operate Codex's in-app browser. This skill supports a Codex-mediated bridge:
+
+1. Run Claude with `--codex-browser-bridge`.
+2. Claude can emit a structured `codex_browser_request`.
+3. Codex uses its Browser plugin to inspect the rendered page.
+4. Codex records a `codex_browser_observation`.
+5. The wrapper resumes Claude with the observation.
+
+Example first pass:
+
+```bash
+python scripts/invoke_claude_agent.py \
+  --cwd . \
+  --codex-browser-bridge \
+  --prompt "Review the local checkout page visually. Request browser evidence if needed."
+```
+
+After Codex satisfies the request:
+
+```bash
+python scripts/invoke_claude_agent.py \
+  --cwd . \
+  --resume <session-id> \
+  --codex-browser-bridge \
+  --browser-observation-file .claude-code-agents/browser-bridge/<id>.observation.json
+```

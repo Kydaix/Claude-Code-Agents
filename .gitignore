@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .venv-validate/
 .tmp-skills-install/
+.claude-code-agents/
 .env
 .env.*
 secrets/
