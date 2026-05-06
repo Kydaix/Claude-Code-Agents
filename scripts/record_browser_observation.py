@@ -10,6 +10,9 @@ import re
 from pathlib import Path
 
 
+REQUEST_TYPES = {"codex_browser_request", "browser_request"}
+
+
 def read_optional_file(path: str | None) -> str | None:
     if not path:
         return None
@@ -18,6 +21,13 @@ def read_optional_file(path: str | None) -> str | None:
 
 def safe_name(value: str) -> str:
     return re.sub(r"[^a-zA-Z0-9_.-]+", "-", value).strip("-") or "browser-observation"
+
+
+def load_browser_request(path: Path) -> dict[str, object]:
+    value = json.loads(path.read_text(encoding="utf-8-sig"))
+    if not isinstance(value, dict) or value.get("type") not in REQUEST_TYPES:
+        raise SystemExit(f"{path} is not a Codex browser request JSON file.")
+    return value
 
 
 def main() -> int:
@@ -36,8 +46,11 @@ def main() -> int:
     parser.add_argument("--output", help="Observation JSON output path.")
     args = parser.parse_args()
 
+    if args.dom_excerpt and args.dom_excerpt_file:
+        raise SystemExit("Use either --dom-excerpt or --dom-excerpt-file, not both.")
+
     request_path = Path(args.request_file).resolve()
-    request = json.loads(request_path.read_text(encoding="utf-8-sig"))
+    request = load_browser_request(request_path)
     request_id = str(request.get("request_id") or request_path.stem.replace(".request", ""))
 
     observation = {
